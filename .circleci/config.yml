@@ -33,7 +33,6 @@ jobs:
             cd m_pw
             docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
             docker-compose up
-            docker-compose logs react-app
 
       - store_test_results:
           path: ./outcome/test-results/results.xml
