@@ -32,7 +32,7 @@ jobs:
           command: |
             cd m_pw
             docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
-            docker-compose up -d
+            docker-compose up
 
       - store_test_results:
           path: ./outcome/test-results/results.xml
