@@ -1,22 +1,20 @@
 version: 2.1
 
 jobs:
-  build_all:
-    docker:
-      - image: circleci/node:14
-    steps:
-      - checkout
-      - run:
-          name: test
-          command: echo "here in build_all will be the rest of the pipeline except the ones for QA that needs to be on dev maaster and stage branches"
+  # build_all:
+  #   docker:
+  #     - image: circleci/node:14
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: test
+  #         command: echo "here in build_all will be the rest of the pipeline except the ones for QA that needs to be on dev maaster and stage branches"
 
   build:
     docker:
       - image: circleci/node:14
         environment:
           CI: true
-          REACT_APP_SERVER_URL: http://react-app:3000
-
 
     steps:
       - checkout
@@ -36,6 +34,7 @@ jobs:
             docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
             docker-compose up -d
             docker-compose run playwright-tests npx playwright test
+            docker-compose run playwright-tests npx playwright show-report
 
       - store_test_results:
           path: ./outcome/test-results/results.xml
