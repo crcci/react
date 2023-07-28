@@ -22,13 +22,6 @@
     "eject": "react-scripts eject"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MohamedEssam4444/Docker-compose-CircleCi-QA-testing.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/MohamedEssam4444/Docker-compose-CircleCi-QA-testing/issues"
-  },
-  "homepage": "https://github.com/MohamedEssam4444/Docker-compose-CircleCi-QA-testing#readme"
-}
+    "type": "git"
+  }
+}s
