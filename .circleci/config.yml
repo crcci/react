@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - checkout
-      - setup_remote_docker:
+      - setup_remote_docker
           # docker_layer_caching: true
 
       #Clone the Playwright tests repository to a different directory within the workspace
