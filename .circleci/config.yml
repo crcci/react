@@ -34,9 +34,6 @@ jobs:
             docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
             docker-compose up -d
             docker-compose run playwright-tests npx playwright test
-            docker-compose run playwright-tests npx playwright show-report
-            docker-compose run playwright-tests npm run test-html-report
-            docker-compose run playwright-tests npm run test-json-report
 
       - store_test_results:
           path: ./outcome/test-results/results.xml
