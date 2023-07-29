@@ -31,15 +31,16 @@ jobs:
           name: Run React app and Playwright tests
           command: |
             cd m_pw
-            docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
-            echo "docker-compose build passed"
-            docker-compose up
+            docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-apps
+            docker-compose up -d react-app # Start the React app service in detached mode
+            sleep 10
+            docker-compose run playwright-tests npx playwright test ./tests
 
       - store_test_results:
-          path: ./outcome/test-results/results.xml
+          path: ./m_pw/outcome/test-results/results.xml
 
       - store_artifacts:
-          path: ./outcome/html
+          path: ./m_pw/outcome/htmls
 
       # Clean up containers after the tests complete
       - run:
