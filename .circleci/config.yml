@@ -33,8 +33,7 @@ jobs:
             cd m_pw
             docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
             echo "docker-compose build passed"
-            docker-compose up -d
-            docker-compose exec playwright-tests npx playwright test ./tests
+            docker-compose up
 
       - store_test_results:
           path: ./outcome/test-results/results.xml
