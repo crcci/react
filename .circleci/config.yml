@@ -33,27 +33,10 @@ jobs:
             cd m_pw
             docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
             echo "docker-compose build passed"
-            docker-compose up -d react-app # Start the React app service in detached mode
-
-            # Wait for the React app to become ready
-            for i in {1..10}; do
-              if curl -s http://localhost:3000 >/dev/null; then
-                echo "React app is ready, proceeding with tests."
-                break
-              else
-                echo "Waiting for React app to become ready..."
-                sleep 10
-              fi
-            done
-
-            # If the loop completes without finding the app ready, exit with an error
-            if [ $i -eq 10 ]; then
-              echo "Timed out waiting for React app to become ready."
-              exit 1
-            fi
-
+            docker-compose run -d react-app npm start
+            slep 10
             # Run the Playwright tests
-            docker-compose run playwright-tests npx playwright test ./tests
+            docker-compose run playwright-tests npx playwright test
 
       - store_test_results:
           path: ./m_pw/outcome/test-results/results.xml
