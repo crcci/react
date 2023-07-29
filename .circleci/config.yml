@@ -24,7 +24,7 @@ jobs:
       #Clone the Playwright tests repository to a different directory within the workspace
       - run:
           name: Clone Playwright tests repository
-          command: git clone https://github.com/sftqa/m_pw
+          command: git clone git@github.com:sftqa/m_pw.git
 
       # Use Docker-Compose to run both services together
       - run:
@@ -32,9 +32,8 @@ jobs:
           command: |
             cd m_pw
             docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
-            echo "docker-compose build passed"
             docker-compose run -d react-app npm start
-            sleep 10
+            sleep 1000
             # Run the Playwright tests
             docker-compose run playwright-tests npx playwright test
 
