@@ -33,7 +33,7 @@ jobs:
             cd m_pw
             docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
             docker-compose run -d react-app npm start
-            sleep 1000
+            sleep 10
             # Run the Playwright tests
             docker-compose run playwright-tests npx playwright test
 
