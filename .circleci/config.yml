@@ -27,7 +27,7 @@ jobs:
           command: git clone https://github.com/sftqa/m_pw
 
       # Use Docker-Compose to run both services together
-     - run:
+      - run:
           name: Run React app and Playwright tests
           command: |
             cd m_pw
