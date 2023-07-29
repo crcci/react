@@ -31,9 +31,9 @@ jobs:
           name: Run React app and Playwright tests
           command: |
             cd m_pw
-            docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-apps
+            docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
             docker-compose up -d react-app # Start the React app service in detached mode
-            sleep 10
+            sleep 10s
             docker-compose run playwright-tests npx playwright test ./tests
 
       - store_test_results:
