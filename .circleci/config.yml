@@ -38,10 +38,10 @@ jobs:
             docker-compose run playwright-tests npx playwright test
 
       - store_test_results:
-          path: ./m_react/m_pw/test-results/results.xml
+          path: ./test-results/results.xml
 
       - store_artifacts:
-          path: ./m_react/m_pw/test-results 
+          path: ./test-results 
 
       # Clean up containers after the tests complete
       - run:
