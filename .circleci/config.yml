@@ -32,10 +32,10 @@ jobs:
           command: |
             cd m_pw
             docker-compose -f docker-merchant-dashboard/docker-compose.yml build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
-            docker-compose run -d react-app npm start
+            docker-compose -f docker-merchant-dashboard/docker-compose.yml run -d react-app npm start
             sleep 10
             # Run the Playwright tests
-            docker-compose run playwright-tests npx playwright test
+            docker-compose -f docker-merchant-dashboard/docker-compose.yml run playwright-tests npx playwright test
 
       - store_test_results:
           path: ./test-results/results.xml
