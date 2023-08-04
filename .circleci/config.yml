@@ -12,7 +12,7 @@ jobs:
 
   build:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
         environment:
           CI: true
 
@@ -32,13 +32,13 @@ jobs:
           command: |
             cd m_pw
             echo "inside directory"
-            docker-compose -f docker-merchant-dashboard/docker-compose.yml build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
+            docker compose -f docker-merchant-dashboard/docker-compose.yml build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
             echo "after build"
-            docker-compose -f docker-merchant-dashboard/docker-compose.yml run -d react-app npm start
+            docker compose -f docker-merchant-dashboard/docker-compose.yml run -d react-app npm start
             echo "after react"
             sleep 10
             # Run the Playwright tests
-            docker-compose -f docker-merchant-dashboard/docker-compose.yml run playwright-tests npx playwright test
+            docker compose -f docker-merchant-dashboard/docker-compose.yml run playwright-tests npx playwright test
 
       - store_test_results:
           path: ./test-results/results.xml
