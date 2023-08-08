@@ -1,44 +1,67 @@
 version: 2.1
-
 jobs:
-  # build_all:
-  #   docker:
-  #     - image: circleci/node:14
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: test
-  #         command: echo "here in build_all will be the rest of the pipeline except the ones for QA that needs to be on dev maaster and stage branches"
-
-  build:
+  npm_installs:
     docker:
-      - image: circleci/node:16
-        environment:
-          CI: true
-
+      - image: circleci/node:16.15
+      - working_directory: ~/app
     steps:
       - checkout
-      - setup_remote_docker
-          # docker_layer_caching: true
+      - restore_cache:
+          key: dependency-cache-{{checksum "package.json"}}
+      - run:
+          name: npm install
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{checksum "package.json"}}
+          paths:
+            - ./node_modules
 
-      #Clone the Playwright tests repository to a different directory within the workspace
+  test:
+    docker:
+      - image: circleci/node:16.15
+      - working_directory: ~/app
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{checksum "package.json"}}
+      - setup_remote_docker
+          version: 20.10.5
+          docker_layer_caching: true
+
+      # Start the React app in the background
+      - run:
+          name: Start App Container
+          command: npm start
+          background: true
+
       - run:
           name: Clone Playwright tests repository
-          command: git clone git@github.com:sftqa/m_pw.git
+          command: git clone git@github.com:sftqa/m_pw.git /
 
-      # Use Docker-Compose to run both services together
       - run:
-          name: Run React app and Playwright tests
+          name: Run Playwright Tests
           command: |
-            cd m_pw
-            echo "inside directory"
-            docker compose -f docker-merchant-dashboard/docker-compose.yml build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
-            echo "after build"
-            docker compose -f docker-merchant-dashboard/docker-compose.yml run -d react-app npm start
-            echo "after react"
-            sleep 10
-            # Run the Playwright tests
-            docker compose -f docker-merchant-dashboard/docker-compose.yml run playwright-tests npx playwright test
+            # Build the Docker image using the Dockerfile in m_pw repo
+            docker build -t playwright-tests /m_pw/docker-merchant-dashboard/
+
+            # Run Playwright tests using the built Docker image
+            docker run --rm --network="host" playwright-tests playwright-tests npx playwright test
+
+
+      # - run:
+      #     name: Run React app and Playwright tests
+      #     command: |
+      #       cd m_pws
+      #       echo "inside directory"
+      #       docker build -t react-app-img ./docker-merchant/Dockerfile
+      #       docker run -it  react-app
+      #       docker compose -f docker-merchant-dashboard/docker-compose.yml build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} react-app
+      #       echo "after build"
+      #       docker compose -f docker-merchant-dashboard/docker-compose.yml run -d react-app npm start
+      #       echo "after react"
+      #       sleep 10
+      #       # Run the Playwright tests
+      #       docker compose -f docker-merchant-dashboard/docker-compose.yml run playwright-tests npx playwright test
 
       - store_test_results:
           path: ./test-results/results.xml
