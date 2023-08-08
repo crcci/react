@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  npm_installs:
+  npm_install:
     docker:
       - image: circleci/node:16.15
       - working_directory: ~/app
@@ -78,11 +78,12 @@ jobs:
 
 workflows:
   version: 2
-  build_and_test:
+  install_and_test:
     jobs:
-      # - build_all
-
-      - build:
+      - npm_install
+      - test:
+          requires:
+            - npm_install
           filters:
             branches:
               only:
@@ -90,3 +91,4 @@ workflows:
                 - stage
                 - master
                 - main
+                - optimize_ci
