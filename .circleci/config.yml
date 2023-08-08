@@ -41,6 +41,7 @@ jobs:
       - run:
           name: Run Playwright Tests
           command: |
+            cd /home/circleci/project/m_pw
             # Build the Docker image using the Dockerfile in m_pw repo
             docker build -t playwright-tests -f docker-merchant-dashboard/Dockerfile .
             docker run --rm --network="host" playwright-tests npx playwright test
