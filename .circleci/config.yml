@@ -33,13 +33,15 @@ jobs:
 
       - run:
           name: Clone Playwright tests repository
-          command: git clone git@github.com:sftqa/m_pw.git
+          command: | 
+            git clone git@github.com:sftqa/m_pw.git
+            cd /home/circleci/project/m_pw
+            git checkout optimize_ci_pw
 
       - run:
           name: Run Playwright Tests
           command: |
             # Build the Docker image using the Dockerfile in m_pw repo
-            cd /home/circleci/project/m_pw
             docker build -t playwright-tests -f docker-merchant-dashboard/Dockerfile .
             docker run --rm --network="host" playwright-tests npx playwright test
 
