@@ -24,7 +24,7 @@ jobs:
       - checkout
       - restore_cache:
           key: dependency-cache-{{checksum "package.json"}}
-      - setup_remote_docker
+      - setup_remote_docker:
           version: 20.10.5
           docker_layer_caching: true
 
