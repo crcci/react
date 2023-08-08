@@ -44,7 +44,7 @@ jobs:
             docker run --rm --network="host" playwright-tests npx playwright test
 
       - store_test_results:
-          path: ./test-results/results.xml
+          path: /home/circleci/project/m_pw/test-results/results.xml
 
       - store_artifacts:
           path: ./test-results 
