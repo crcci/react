@@ -33,12 +33,13 @@ jobs:
 
       - run:
           name: Clone Playwright tests repository
-          command: git clone git@github.com:sftqa/m_pw.git /m_pw
+          command: git clone git@github.com:sftqa/m_pw.git
 
       - run:
           name: Run Playwright Tests
           command: |
             # Build the Docker image using the Dockerfile in m_pw repo
+            cd m_pw
             docker build -t playwright-tests /docker-merchant-dashboard/
 
             # Run Playwright tests using the built Docker image
