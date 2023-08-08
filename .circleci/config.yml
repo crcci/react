@@ -6,12 +6,12 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{checksum "package.json"}}
+          key: dependency-cache-123
       - run:
           name: install
           command: npm install
       - save_cache:
-          key: dependency-cache-{{checksum "package.json"}}
+          key: dependency-cache-123
           paths:
             - ./node_modules
 
@@ -21,7 +21,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{checksum "package.json"}}
+          key: dependency-cache-123
       - setup_remote_docker:
           docker_layer_caching: true
 
