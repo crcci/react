@@ -1,5 +1,5 @@
 # Dockerfile for React app
-FROM node:16.15 AS react-builder
+FROM node:14 AS react-builder
 ARG GITHUB_TOKEN
 WORKDIR /app
 COPY package.json /app/package.json
