@@ -3,7 +3,6 @@ jobs:
   npm_install:
     docker:
       - image: circleci/node:16.15
-      - working_directory: ~/app
     steps:
       - checkout
       - restore_cache:
@@ -19,7 +18,6 @@ jobs:
   test:
     docker:
       - image: circleci/node:16.15
-      - working_directory: ~/app
     steps:
       - checkout
       - restore_cache:
@@ -51,9 +49,6 @@ jobs:
 
       - store_artifacts:
           path: ./test-results 
-
-
-# Define workflows
 
 workflows:
   version: 2
