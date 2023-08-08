@@ -23,7 +23,7 @@ jobs:
       - restore_cache:
           key: dependency-cache-123
       - setup_remote_docker:
-          docker_layer_caching: true
+          docker_layer_caching: false
 
       # Start the React app in the background
       - run:
