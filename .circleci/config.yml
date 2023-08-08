@@ -39,9 +39,9 @@ jobs:
           name: Run Playwright Tests
           command: |
             # Build the Docker image using the Dockerfile in m_pw repo
-            cd m_pw/
-            echo $PWD
-            docker build -t playwright-tests /home/circleci/project/m_pw/docker-merchant-dashboard/
+            cd /home/circleci/project/m_pw/docker-merchant-dashboard
+            docker build -t playwright-tests .
+
 
 
             # Run Playwright tests using the built Docker image
