@@ -25,6 +25,17 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: false
 
+      - run:
+          name: docker commands
+          command: |
+          container_name=$(cat /etc/hostname)
+          network_name=$(docker inspect $container_name --format '{{ range .NetworkSettings.Networks }}{{ .NetworkID }}{{ end }}')
+          docker network inspect $network_name
+          docker ps
+          docker images
+          docker network ls
+
+
       # Start the React app in the background
       - run:
           name: Start App Container
