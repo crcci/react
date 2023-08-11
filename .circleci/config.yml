@@ -32,7 +32,8 @@ jobs:
             network_name=$(docker inspect $container_name --format '{{ range $name, $conf := .NetworkSettings.Networks }}{{ $name }}{{ end }}')
             network_name_without_suffix=${network_name%bridge}
             docker network inspect $network_name_without_suffix
-            docker network inspect $network_name_without_suffix | jq -r '.[0].Containers | to_entries[0].value.IPv4Address' | cut -d '/' -f 1 | cut -d '"' -f 2)
+            container_ip=$(docker network inspect $network_name_without_suffix | jq -r '.[0].Containers | to_entries[0].value.IPv4Address' | cut -d '/' -f 1)
+            echo $container_ip
             docker ps
             docker images
             docker network ls
