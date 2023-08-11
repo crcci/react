@@ -29,7 +29,7 @@ jobs:
           name: docker commands
           command: |
             container_name=$(cat /etc/hostname)
-            network_name=$(docker inspect $container_name --format '{{ range .NetworkSettings.Networks }}{{ .NetworkID }}{{ end }}')
+            network_name=$(docker inspect $container_name --format '{{ range $name, $conf := .NetworkSettings.Networks }}{{ $name }}{{ end }}')
             docker network inspect $network_name
             docker ps
             docker images
@@ -69,7 +69,6 @@ workflows:
   version: 2
   install_and_test:
     jobs:
-      - npm_install
       - test:
           requires:
             - npm_install
