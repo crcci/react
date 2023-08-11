@@ -62,14 +62,16 @@ jobs:
             container_name=$(cat /etc/hostname)
             network_name=$(docker inspect $container_name --format '{{ range $name, $conf := .NetworkSettings.Networks }}{{ $name }}{{ end }}')
             network_name_without_suffix=${network_name%bridge}
-            docker network inspect $network_name_without_suffix
             container_ip=$(docker network inspect $network_name_without_suffix | jq -r '.[0].Containers | to_entries[0].value.IPv4Address' | cut -d '/' -f 1)
             echo $container_ip
+            network_info=$(docker network inspect $network_name_without_suffix)
+            container_name=$(echo "$network_info" | jq -r '.[0].Containers | to_entries[0].value.Name')
+
             docker ps 
             docker images
             docker network ls
             docker build -t playwright-tests .
-            docker run --rm --network $network_name_without_suffix --name qa -e REACT_APP_SERVER_URL=$container_ip:3000  playwright-tests npx playwright test
+            docker run --rm --network $network_name_without_suffix --name qa -e REACT_APP_SERVER_URL=$container_name:3000  playwright-tests npx playwright test
 
       - store_test_results:
           path: /home/circleci/project/m_pw/test-results/results.xml
