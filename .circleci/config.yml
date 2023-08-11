@@ -39,7 +39,7 @@ jobs:
             docker network ls
 
 
-      # Start the React app in the  background
+      # Start the React app in the background
       - run:
           name: Start App Container
           command: npm start
