@@ -71,7 +71,7 @@ jobs:
             docker images
             docker network ls
             docker build -t playwright-tests .
-            docker run --rm --network $network_name_without_suffix --name qa -e REACT_APP_SERVER_URL=$container_name:3000  playwright-tests npx playwright test
+            docker run --rm --network $network_name_without_suffix --name qa -e REACT_APP_SERVER_URL=$container_ip:3000  playwright-tests npx playwright test
 
       - store_test_results:
           path: /home/circleci/project/m_pw/test-results/results.xml
