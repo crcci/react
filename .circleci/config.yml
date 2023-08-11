@@ -58,20 +58,20 @@ jobs:
           name: Run Playwright Tests
           command: |
             cd /home/circleci/project/m_pw  
-            # Build the Docker image using the Dockerfile in m_pw repo
             container_name=$(docker ps --format "{{.Names}}" --filter "ancestor=circleci/node:14")
-            echo $container_name
-            network_name=$(docker inspect $container_name --format '{{ range $name, $conf := .NetworkSettings.Networks }}{{ $name }}{{ end }}')
-            echo $network_name
-            # network_name_without_suffix=${network_name%bridge}
-            # container_ip=$(docker network inspect $network_name | jq -r '.[0].Containers | to_entries[0].value.IPv4Address' | cut -d '/' -f 1)
-            # echo $container_ip
+
+            container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_name)
+            network_name=$(docker inspect -f '{{range $network, $config := .NetworkSettings.Networks}}{{printf "%s\n" $network}}{{end}}' $container_name)
+
+            echo "Container Name: $container_name"
+            echo "Container IP: $container_ip"
+            echo "Network Name: $network_name"
 
             docker ps 
             docker images
             docker network ls
             # docker build -t playwright-tests .
-            # docker run --rm --network bridge --name qa -e REACT_APP_SERVER_URL=$container_ip:3000  playwright-tests npx playwright test
+            # docker run --rm --network $network_name --name qa -e REACT_APP_SERVER_URL=$container_ip:3000  playwright-tests npx playwright test
 
       - store_test_results:
           path: /home/circleci/project/m_pw/test-results/results.xml
