@@ -58,7 +58,7 @@ jobs:
           name: Run Playwright Tests
           command: |
             cd /home/circleci/project/m_pw
-            # Build the Docker image using the Dockerfile in m_pw repo
+            # Build the Docker image using the Dockerfile  in m_pw repo
             container_name=$(cat /etc/hostname)
             network_name=$(docker inspect $container_name --format '{{ range $name, $conf := .NetworkSettings.Networks }}{{ $name }}{{ end }}')
             network_name_without_suffix=${network_name%bridge}
