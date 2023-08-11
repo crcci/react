@@ -70,8 +70,6 @@ workflows:
   install_and_test:
     jobs:
       - test:
-          requires:
-            - npm_install
           filters:
             branches:
               only:
