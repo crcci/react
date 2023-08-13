@@ -18,77 +18,77 @@ jobs:
   test:
     build:
       machine: true
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-123
-      - run:
-          name: install
-          command: npm install
-      - save_cache:
-          key: dependency-cache-123
-          paths:
-            - ./node_modules
+      steps:
+        - checkout
+        - restore_cache:
+            key: dependency-cache-123
+        - run:
+            name: install
+            command: npm install
+        - save_cache:
+            key: dependency-cache-123
+            paths:
+              - ./node_modules
 
-      - run:
-          name: Install Dependencies and Libraries
-          command: |
-            apt-get update
-            apt-get install -y \
-              libxtst6 \
-              libgtk-3-0 \
-              libasound2 \
-              libdbus-glib-1-2
+        - run:
+            name: Install Dependencies and Libraries
+            command: |
+              apt-get update
+              apt-get install -y \
+                libxtst6 \
+                libgtk-3-0 \
+                libasound2 \
+                libdbus-glib-1-2
 
-      - run:
-          name: Clone Playwright repo, get ready
-          command: |
-            echo $PWD
-            git clone git@github.com:crcci/pw.git
-            cd /home/circleci/project/pw
-            git checkout optimize_ci_pw
-            npm install
+        - run:
+            name: Clone Playwright repo, get ready
+            command: |
+              echo $PWD
+              git clone git@github.com:crcci/pw.git
+              cd /home/circleci/project/pw
+              git checkout optimize_ci_pw
+              npm install
 
-      # Start the React app in the background
-      - run:
-          name: Start App Container
-          command: npm start
-          background: true
-      - run:
-          name: wait for react app
-          command: | 
-              timeout=$((SECONDS + 60))
-              while [ $SECONDS -lt $timeout ]; do
-                if curl -s http://localhost:3000; then
-                  echo "React app is available!"
-                  break
-                else
-                  echo "Waiting for the React app to be available..."
-                  sleep 5
-                fi
-              done
-      - run:
-          name: Run Playwright Tests
-          command: | 
-            cd /home/circleci/project/pw
-            npm install
-            npx playwright install 
-            npx playwright test
+        # Start the React app in the background
+        - run:
+            name: Start App Container
+            command: npm start
+            background: true
+        - run:
+            name: wait for react app
+            command: | 
+                timeout=$((SECONDS + 60))
+                while [ $SECONDS -lt $timeout ]; do
+                  if curl -s http://localhost:3000; then
+                    echo "React app is available!"
+                    break
+                  else
+                    echo "Waiting for the React app to be available..."
+                    sleep 5
+                  fi
+                done
+        - run:
+            name: Run Playwright Tests
+            command: | 
+              cd /home/circleci/project/pw
+              npm install
+              npx playwright install 
+              npx playwright test
 
-      - store_test_results:
-          path: /home/circleci/project/pw/outcome/test-results/results.xml
+        - store_test_results:
+            path: /home/circleci/project/pw/outcome/test-results/results.xml
 
-      - store_artifacts:
-          path: /home/circleci/project/pw/outcome/html 
+        - store_artifacts:
+            path: /home/circleci/project/pw/outcome/html 
 
-      # - run:
-      #     name: docker commands
-      #     command: |
-      #           docker run -v /home/circleci/project/:/app --name react-app -p 9000:9000 -d circleci/node:14
-      # - run:
-      #     name: Start server in background
-      #     command: |
-      #       docker exec -d react-app npm start
+        # - run:
+        #     name: docker commands
+        #     command: |
+        #           docker run -v /home/circleci/project/:/app --name react-app -p 9000:9000 -d circleci/node:14
+        # - run:
+        #     name: Start server in background
+        #     command: |
+        #       docker exec -d react-app npm start
 
 
 
