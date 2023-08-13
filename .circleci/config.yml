@@ -17,40 +17,41 @@ jobs:
 
   test:
     docker:
-      - image: ugurnurcan/imgs:latest
       - image: circleci/node:14
+      # - image: ugurnurcan/imgs:latest
     steps:
-      - checkout #merchant rep
+      - checkout #merchant repo
       - restore_cache:
           key: dependency-cache-123
       - setup_remote_docker:
-          docker_layer_caching: false
-
+          docker_layer_caching: true
+s
       - run:
           name: Clone Playwright repo, get ready
           command: |
-            git clone git@github.com:sftqa/m_pw.git /home/circleci/project/m_pw
+            git clone git@github.com:crcci/pw.git
             cd /home/circleci/project/m_pw
             git checkout optimize_ci_pw
             npm install
-
-      - run:
-          name: docker commands
-          command: |
-                docker run -v /home/circleci/project/:/app --name react-app -p 9000:9000 -d circleci/node:14
 
       # Start the React app in the background
       - run:
           name: Start App Container
           command: npm start
           background: true
-
-      - run:
-          name: Start server in background
-          command: |
-            docker exec -d react-app npm start
-
-
+      -run:
+          name: wait for react app
+          command: | 
+              timeout=$((SECONDS + 60))
+              while [ $SECONDS -lt $timeout ]; do
+                if curl -s http://localhost:3000; then
+                  echo "React app is available!"
+                  break
+                else
+                  echo "Waiting for the React app to be available..."
+                  sleep 5
+                fi
+              done
       - run:
           name: Run Playwright Tests
           command: | 
@@ -62,6 +63,18 @@ jobs:
 
       - store_artifacts:
           path: /home/circleci/project/m_pw/outcome/html 
+
+      # - run:
+      #     name: docker commands
+      #     command: |
+      #           docker run -v /home/circleci/project/:/app --name react-app -p 9000:9000 -d circleci/node:14
+      # - run:
+      #     name: Start server in background
+      #     command: |
+      #       docker exec -d react-app npm start
+
+
+
 
 workflows:
   version: 2
