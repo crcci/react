@@ -25,7 +25,7 @@ jobs:
           key: dependency-cache-123
       - setup_remote_docker:
           docker_layer_caching: true
-s
+
       - run:
           name: Clone Playwright repo, get ready
           command: |
