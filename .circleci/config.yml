@@ -39,7 +39,7 @@ jobs:
           name: Start App Container
           command: npm start
           background: true
-      -run:
+      - run:
           name: wait for react app
           command: | 
               timeout=$((SECONDS + 60))
