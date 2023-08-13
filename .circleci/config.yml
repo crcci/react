@@ -72,7 +72,7 @@ jobs:
           path: /home/circleci/project/pw/outcome/test-results/results.xml
 
       - store_artifacts:
-          path: /home/circleci/project/pw/outcome/html,/home/circleci/project/pw/test-results
+          path: /home/circleci/project/pw/outcome/html
 
       # - run:
       #     name: docker commands
