@@ -62,7 +62,7 @@ jobs:
           command: | 
             cd /home/circleci/project/pw
             npm install 
-            npx playwright-tests npx playwright test
+            npx playwright test
 
       - store_test_results:
           path: /home/circleci/project/pw/outcome/test-results/results.xml
