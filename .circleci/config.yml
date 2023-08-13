@@ -60,7 +60,8 @@ jobs:
       - run:
           name: Run Playwright Tests
           command: | 
-            cd /home/circleci/project/pw 
+            cd /home/circleci/project/pw
+            npm install 
             npx playwright-tests npx playwright test
 
       - store_test_results:
