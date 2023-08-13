@@ -20,7 +20,7 @@ jobs:
       - image: circleci/node:14
       # - image: ugurnurcan/imgs:latest
     steps:
-      - checkout #merchant repo
+      - checkout
       - restore_cache:
           key: dependency-cache-123
       - setup_remote_docker:
