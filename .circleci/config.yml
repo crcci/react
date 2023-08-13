@@ -18,19 +18,24 @@ jobs:
   test:
     docker:
       - image: circleci/node:14
-      # - image: ugurnurcan/imgs:latest
     steps:
       - checkout
       - restore_cache:
           key: dependency-cache-123
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - run:
+          name: install
+          command: npm install
+      - save_cache:
+          key: dependency-cache-123
+          paths:
+            - ./node_modules
 
       - run:
           name: Clone Playwright repo, get ready
           command: |
+            echo $PWD
             git clone git@github.com:crcci/pw.git
-            cd /home/circleci/project/m_pw
+            cd /home/circleci/project/pw
             git checkout optimize_ci_pw
             npm install
 
@@ -55,14 +60,14 @@ jobs:
       - run:
           name: Run Playwright Tests
           command: | 
-            cd /home/circleci/project/m_pw 
+            cd /home/circleci/project/pw 
             npx playwright-tests npx playwright test
 
       - store_test_results:
-          path: /home/circleci/project/m_pw/outcome/test-results/results.xml
+          path: /home/circleci/project/pw/outcome/test-results/results.xml
 
       - store_artifacts:
-          path: /home/circleci/project/m_pw/outcome/html 
+          path: /home/circleci/project/pw/outcome/html 
 
       # - run:
       #     name: docker commands
