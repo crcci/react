@@ -22,13 +22,6 @@ jobs:
       - checkout
       - restore_cache:
           key: dependency-cache-123
-      - run:
-          name: install
-          command: npm install
-      - save_cache:
-          key: dependency-cache-123
-          paths:
-            - ./node_modules
 
       - run:
           name: Install Dependencies and Libraries
