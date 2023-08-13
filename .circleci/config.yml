@@ -1,8 +1,8 @@
 version: 2.1
 jobs:
   npm_install:
-    docker:
-      - image: circleci/node:14
+    macos: # executor type
+      xcode: 14.2.0
     steps:
       - checkout
       - restore_cache:
