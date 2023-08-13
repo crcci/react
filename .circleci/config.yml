@@ -5,6 +5,15 @@ jobs:
       - image: circleci/node:14
     steps:
       - checkout
+      - run:
+        name: Install Dependencies and Libraries
+        command: |
+          apt-get update && \
+          apt-get install -y \
+            libxtst6 \
+            libgtk-3-0 \
+            libasound2 \
+            libdbus-glib-1-2
       - restore_cache:
           key: dependency-cache-123
       - run:
@@ -16,8 +25,8 @@ jobs:
             - ./node_modules
 
   test:
-    macos: # executor type
-      xcode: 14.2.0
+    docker:
+      - image: circleci/node:14
     steps:
       - checkout
       - restore_cache:
