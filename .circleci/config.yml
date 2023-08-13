@@ -17,27 +17,27 @@ jobs:
 
   test:
     docker:
+      - image: mcr.microsoft.com/playwright:v1.36.1
       - image: circleci/node:14
     steps:
-      - checkout
+      - checkout #merchant rep
       - restore_cache:
           key: dependency-cache-123
       - setup_remote_docker:
           docker_layer_caching: false
 
-      # - run:
-      #     name: docker commands
-      #     command: |
-      #       # container_name=$(cat /etc/hostname)
-      #       # network_name=$(docker inspect $container_name --format '{{ range $name, $conf := .NetworkSettings.Networks }}{{ $name }}{{ end }}')
-      #       # network_name_without_suffix=${network_name%bridge}
-      #       # docker network inspect $network_name_without_suffix
-      #       container_ip=$(docker network inspect bridge | jq -r '.[0].Containers | to_entries[0].value.IPv4Address' | cut -d '/' -f 1)
-      #       echo $container_ip
-      #       docker ps 
-      #       docker images
-      #       docker network ls
+      - run:
+          name: Clone Playwright repo, get ready
+          command: |
+            git clone git@github.com:sftqa/m_pw.git /home/circleci/project/m_pw
+            cd /home/circleci/project/m_pw
+            git checkout optimize_ci_pw
+            npm install
 
+      - run:
+          name: docker commands
+          command: |
+                docker run -v /home/circleci/project/:/app --name react-app -p 9000:9000 -d circleci/node:14
 
       # Start the React app in the background
       - run:
@@ -46,38 +46,22 @@ jobs:
           background: true
 
       - run:
-          name: Clone Playwright tests repository
+          name: Start server in background
           command: |
-            git clone git@github.com:sftqa/m_pw.git /home/circleci/project/m_pw
-            cd /home/circleci/project/m_pw
-            git checkout optimize_ci_pw
-            mv docker-merchant-dashboard/Dockerfile .
+            docker exec -d react-app npm start
 
 
       - run:
           name: Run Playwright Tests
-          command: |
-
-
-            container_name=$(docker ps --format "{{.Names}}" --filter "ancestor=circleci/node:14")
-            echo $container_name
-            # container_ip=$(docker network inspect bridge | jq -r '.[0].Containers | to_entries[0].value.IPv4Address' | cut -d '/' -f 1)
-            # echo $container_nameS
-            # network_info=$(docker network inspect bridge)
-            # echo $network_info  
-
-            docker ps 
-            docker images
-            docker network ls
-            cd /home/circleci/project/m_pw
-            docker build -t playwright-tests .
-            docker run --name qa --network bridge -e REACT_APP_SERVER_URL=$container_name:3000 playwright-tests npx playwright test
+          command: | 
+            cd /home/circleci/project/m_pw 
+            npx playwright-tests npx playwright test
 
       - store_test_results:
-          path: /home/circleci/project/m_pw/test-results/results.xml
+          path: /home/circleci/project/m_pw/outcome/test-results/results.xml
 
       - store_artifacts:
-          path: ./test-results 
+          path: /home/circleci/project/m_pw/outcome/html 
 
 workflows:
   version: 2
