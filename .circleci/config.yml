@@ -17,6 +17,7 @@ jobs:
 
   test:
     machine: true
+    resource_class: small
     steps:
       - checkout
       - restore_cache:
