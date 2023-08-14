@@ -16,23 +16,23 @@ jobs:
             - ./node_modules
 
   test:
-    machine: true
-    # resource_class:  small 
+    machine:
+      image: ubuntu-2204:2023.07.2
     steps:
       - checkout
       - restore_cache:
           key: dependency-cache-123
 
-      - run:
-          name: Install Dependencies and Libraries
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y \
-              libxtst6 \
-              libgtk-3-0 \
-              libasound2 \
-              libdbus-glib-1-2
-            sudo apt-get install -y gstreamer1.0-libav libnss3-tools libatk-bridge2.0-0 libcups2-dev libxkbcommon-x11-0 libxcomposite-dev libxrandr2 libgbm-dev libgtk-3-0
+      # - run:
+      #     name: Install Dependencies and Libraries
+      #     command: |
+      #       sudo apt-get update
+      #       sudo apt-get install -y \
+      #         libxtst6 \
+      #         libgtk-3-0 \
+      #         libasound2 \
+      #         libdbus-glib-1-2
+      #       # sudo apt-get install -y gstreamer1.0-libav libnss3-tools libatk-bridge2.0-0 libcups2-dev libxkbcommon-x11-0 libxcomposite-dev libxrandr2 libgbm-dev libgtk-3-0
 
       - run:
           name: Clone Playwright repo, get ready
@@ -41,7 +41,8 @@ jobs:
             git clone git@github.com:crcci/pw.git
             cd /home/circleci/project/pw
             git checkout optimize_ci_pw
-            npm install --with-deps
+            npm ci
+            npx playwright --with-deps
 
       # Start the React app in the background
       - run:
@@ -65,8 +66,6 @@ jobs:
           name: Run Playwright Tests
           command: | 
             cd /home/circleci/project/pw
-            npm install
-            npx playwright install 
             npx playwright test
 
       - store_test_results:
