@@ -41,8 +41,10 @@ jobs:
             git clone git@github.com:crcci/pw.git
             cd /home/circleci/project/pw
             git checkout optimize_ci_pw
-            npm ci
-            npx playwright install --with-deps
+            npm install
+            npx playwright install --with-deps chromium
+            npx playwright install webkit
+            npx playwright install-deps
 
       # Start the React app in the background
       - run:
