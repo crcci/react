@@ -42,7 +42,7 @@ jobs:
             cd /home/circleci/project/pw
             git checkout optimize_ci_pw
             npm ci
-            npx playwright --with-deps
+            npx playwright install --with-deps
 
       # Start the React app in the background
       - run:
