@@ -32,6 +32,7 @@ jobs:
               libgtk-3-0 \
               libasound2 \
               libdbus-glib-1-2
+            sudo apt-get install -y gstreamer1.0-libav libnss3-tools libatk-bridge2.0-0 libcups2-dev libxkbcommon-x11-0 libxcomposite-dev libxrandr2 libgbm-dev libgtk-3-0
 
       - run:
           name: Clone Playwright repo, get ready
@@ -72,8 +73,7 @@ jobs:
           path: /home/circleci/project/pw/outcome/test-results/results.xml
 
       - store_artifacts:
-          path: /home/circleci/project/pw/outcome/html,/home/circleci/project/pw/test-results
-
+          path: /home/circleci/project/pw/outcome/html
       # - run:
       #     name: docker commands
       #     command: |
