@@ -17,7 +17,7 @@ jobs:
 
   test:
     machine:
-      image: ubuntu-2204:2023.07.2
+      image: ubuntu-2004:202201-02
     steps:
       - checkout
       - restore_cache:
@@ -41,8 +41,7 @@ jobs:
             git clone git@github.com:crcci/pw.git
             cd /home/circleci/project/pw
             git checkout optimize_ci_pw
-            npm install
-            npx playwright install --with-deps chromium
+            npm ci
             npx playwright install webkit
             npx playwright install-deps
 
