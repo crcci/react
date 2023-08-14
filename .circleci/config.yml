@@ -31,17 +31,7 @@ jobs:
               libxtst6 \
               libgtk-3-0 \
               libasound2 \
-              libdbus-glib-1-2 \
-              libsoup2.4-1 \
-              libevent-2.1-7 \
-              # libwoff2dec1 \
-              libharfbuzz-icu0 \
-              libgstreamer-plugins-base1.0-0 \
-              libenchant-2-2 \
-              libsecret-1-0 \
-              libhyphen0 \
-              libmanette-0.2-0 \
-              libgles2 
+              libdbus-glib-1-2
 
       - run:
           name: Clone Playwright repo, get ready
@@ -50,7 +40,7 @@ jobs:
             git clone git@github.com:crcci/pw.git
             cd /home/circleci/project/pw
             git checkout optimize_ci_pw
-            npm install
+            npm install --with-deps
 
       # Start the React app in the background
       - run:
@@ -82,7 +72,7 @@ jobs:
           path: /home/circleci/project/pw/outcome/test-results/results.xml
 
       - store_artifacts:
-          path: /home/circleci/project/pw/outcome/html
+          path: /home/circleci/project/pw/outcome/html,/home/circleci/project/pw/test-results
 
       # - run:
       #     name: docker commands
